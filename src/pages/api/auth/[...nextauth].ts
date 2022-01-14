@@ -31,7 +31,7 @@ export default NextAuth({
             q.Create(
               q.Collection('users'),
               { data: { email } }
-            ),
+            ), //poderia ter um update de dados do usuario no banco.. TODO
             q.Get(
               q.Match(
                 q.Index('user_by_email'),
