@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { NextApiRequest, NextApiResponse } from "next";
 import { stripe } from "../../services/stripe";
 import { getSession } from 'next-auth/react'
@@ -29,10 +30,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       success_url: process.env.STRIPE_SUCESS_URL
     })
 
+    return res.status(200).json({ sesionId: stripeCheckoutSessions })
+
   } else {
     res.setHeader('Allow', 'POST');
     res.status(405).end('Method not allowed')
 
   }
-}
 }
