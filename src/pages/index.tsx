@@ -1,23 +1,19 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { SubscribeButton } from '../components/SubscribeButton'
-import styles from './home.module.scss'
-import { GetServerSideProps, GetStaticProps } from 'next'
-import { stripe } from '../services/stripe'
-import { privateEncrypt } from 'crypto'
+import { GetStaticProps } from "next";
+import Head from "next/head";
+import Image from "next/image";
+import { SubscribeButton } from "../components/SubscribeButton";
+import { stripe } from "../services/stripe";
+import styles from "./home.module.scss";
 
 interface HomeProps {
   product: {
-    priceId: string,
-    amount: number
-  }
+    priceId: string;
+    amount: number;
+  };
 }
 
 export default function Home({ product }: HomeProps) {
-
-
   return (
-
     <>
       <Head>
         <title>Home | IG.News</title>
@@ -26,41 +22,42 @@ export default function Home({ product }: HomeProps) {
       <main className={styles.contentContainer}>
         <section className={styles.hero}>
           <span> 👏 Hey, Welcome</span>
-          <h1>News About the <span>React</span> World.</h1>
+          <h1>
+            News About the <span>React</span> World.
+          </h1>
           <p>
             Get acess to all the publications <br />
             <span>for {product.amount} month</span>
           </p>
           <SubscribeButton priceId={product.priceId} />
-
-
         </section>
-        <Image src="/images/avatar.svg" alt="Girl Coding" width={500} height={500} />
-
+        <Image
+          src="/images/avatar.svg"
+          alt="Girl Coding"
+          width={500}
+          height={500}
+        />
       </main>
     </>
-  )
+  );
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const price = await stripe.prices.retrieve('price_1KHFRgERrPAX5ucLDF7DNRIq', {
-    expand: ['product']
-  })
+  const price = await stripe.prices.retrieve("price_1L9tvsH3t2kZcY64gDRkXfw8", {
+    expand: ["product"],
+  });
 
   const product = {
     priceID: price.id,
-    amount: new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    amount: new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
     }).format(price.unit_amount / 100),
-
-
-  }
+  };
   return {
     props: {
-      product
+      product,
     },
     revalidate: 60 * 60 * 24, // 24 hours
-  }
-
-}
+  };
+};
